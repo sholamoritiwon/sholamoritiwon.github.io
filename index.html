@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>You've been challenged on PushUps</title>
+<meta name="description" content="A mystery workout track is waiting. Beat the trivia to unlock your exercise.">
+<meta property="og:title" content="🎧 You've been sent a mystery workout track">
+<meta property="og:description" content="Beat the trivia to unlock your exercise on PushUps: Riddles4Gym.">
+<meta property="og:image" content="https://sholamoritiwon.github.io/pushups/icon.png">
+<meta name="apple-itunes-app" content="app-id=6833501122">
+<style>
+  :root { --lime:#B6FA22; --pink:#FF2E93; --card:#1C1C1E; --muted:#98989F; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background:#000; color:#fff;
+         font-family:ui-rounded,-apple-system,"SF Pro Rounded",system-ui,sans-serif;
+         display:flex; align-items:center; justify-content:center; padding:24px; }
+  main { width:100%; max-width:420px; text-align:center; }
+  img.icon { width:112px; height:112px; border-radius:26px; box-shadow:0 0 40px rgba(255,46,147,.35); }
+  h1 { font-size:28px; margin:22px 0 8px; }
+  p { color:var(--muted); line-height:1.45; margin:0 0 22px; }
+  .card { background:var(--card); border-radius:22px; padding:18px; margin-bottom:18px; }
+  .env { font-size:44px; }
+  a.btn, button.btn { display:block; width:100%; padding:16px; border-radius:999px; border:0; margin:10px 0;
+         font:inherit; font-weight:700; font-size:17px; text-decoration:none; cursor:pointer; }
+  .primary { background:var(--lime); color:#000; }
+  .ghost { background:#2C2C2E; color:#fff; }
+  small { color:var(--muted); display:block; margin-top:14px; line-height:1.4; }
+  ol { text-align:left; color:var(--muted); padding-left:20px; margin:0; line-height:1.6; }
+</style>
+</head>
+<body>
+<main>
+  <img class="icon" src="../icon.png" alt="">
+  <h1>You've been challenged!</h1>
+  <p>A friend locked a workout inside a mystery track. Beat the trivia to unlock it.</p>
+
+  <div class="card">
+    <div class="env">✉️🔒</div>
+    <p style="margin:8px 0 0">Your exercise stays hidden until you crack the trivia — 3 tries.</p>
+  </div>
+
+  <a class="btn primary" id="open" href="#">Open in PushUps</a>
+  <a class="btn ghost" id="store" href="https://apps.apple.com/app/id6833501122">Get PushUps on the App Store</a>
+  <button class="btn ghost" id="copy">Copy challenge link</button>
+
+  <small>New to PushUps?</small>
+  <ol>
+    <li>Tap <b>Copy challenge link</b>.</li>
+    <li>Install PushUps and open it.</li>
+    <li>On the last setup screen, tap <b>Paste</b> — your challenge opens straight away.</li>
+  </ol>
+</main>
+<script>
+  const id = new URLSearchParams(location.search).get("id") || "";
+  const valid = /^[0-9a-f-]{36}$/i.test(id);
+  document.getElementById("open").href = valid ? "pushups://c/" + id : "pushups://";
+  const copyBtn = document.getElementById("copy");
+  copyBtn.onclick = async () => {
+    try { await navigator.clipboard.writeText(location.href); copyBtn.textContent = "Copied ✓"; }
+    catch (e) { prompt("Copy this link:", location.href); }
+  };
+  if (!valid) document.querySelector("h1").textContent = "PushUps: Riddles4Gym";
+</script>
+</body>
+</html>

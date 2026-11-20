@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["2D2XT7DXUV.com.olusholamoritiwon.pushups"],
+        "components": [
+          { "/": "/pushups/c/*", "comment": "PushUps challenge links" }
+        ]
+      }
+    ]
+  }
+}
