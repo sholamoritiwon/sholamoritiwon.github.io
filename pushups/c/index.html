@@ -41,11 +41,12 @@
   </div>
 
   <a class="btn primary" id="open" href="#">Open in PushUps</a>
+  <a class="btn ghost" id="join" href="#" hidden>1 · Join the PushUps test</a>
   <a class="btn ghost" id="store" href="https://apps.apple.com/app/id6833501122">Get PushUps on the App Store</a>
   <button class="btn ghost" id="copy">Copy challenge link</button>
 
   <small>New to PushUps?</small>
-  <ol>
+  <ol id="steps">
     <li>Tap <b>Copy challenge link</b>.</li>
     <li>Install PushUps and open it.</li>
     <li>On the last setup screen, tap <b>Paste</b> — your challenge opens straight away.</li>
@@ -54,7 +55,31 @@
 <script>
   const id = new URLSearchParams(location.search).get("id") || "";
   const valid = /^[0-9a-f-]{36}$/i.test(id);
-  document.getElementById("open").href = valid ? "pushups://c/" + id : "pushups://";
+  const open = document.getElementById("open");
+
+  // Android (Google Play closed test). Testers must be on the test's email list.
+  const PACKAGE = "com.olusholamoritiwon.pushups";
+  const TEST_OPT_IN = "https://play.google.com/apps/testing/" + PACKAGE;
+  const PLAY_URL = "https://play.google.com/store/apps/details?id=" + PACKAGE +
+                   (valid ? "&referrer=" + encodeURIComponent("challenge=" + id) : "");
+
+  if (/android/i.test(navigator.userAgent)) {
+    // Opens the app if installed; otherwise sends them to the test sign-up page.
+    open.href = "intent://" + (valid ? "c/" + id : "") + "#Intent;scheme=pushups;package=" + PACKAGE +
+                ";S.browser_fallback_url=" + encodeURIComponent(TEST_OPT_IN) + ";end";
+    const join = document.getElementById("join");
+    join.href = TEST_OPT_IN;
+    join.hidden = false;
+    const store = document.getElementById("store");
+    store.href = PLAY_URL;
+    store.textContent = "2 · Install from Google Play";
+    document.getElementById("steps").innerHTML =
+      "<li>Tap <b>Copy challenge link</b>.</li>" +
+      "<li>Tap <b>Join the PushUps test</b> and accept, then <b>Install from Google Play</b>.</li>" +
+      "<li>Open PushUps — on the last setup screen tap <b>Paste</b>, and your challenge opens.</li>";
+  } else {
+    open.href = valid ? "pushups://c/" + id : "pushups://";
+  }
   const copyBtn = document.getElementById("copy");
   copyBtn.onclick = async () => {
     try { await navigator.clipboard.writeText(location.href); copyBtn.textContent = "Copied ✓"; }
